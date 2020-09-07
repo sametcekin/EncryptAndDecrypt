@@ -1,0 +1,30 @@
+﻿<Window x:Class="EncryptAndDecrypt.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EncryptAndDecrypt.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel Margin="5">
+        <TextBlock Margin="5" Text="Cryption Type"/>
+        <ComboBox Margin="5" x:Name="CryptionType" SelectionChanged="CryptionType_SelectionChanged"/>
+
+        <TextBlock Margin="5" Text="Tag (For saving to local)"/>
+        <TextBox Margin="5" x:Name="textTag"/>
+
+
+        <TextBlock Margin="5" Text="Salt"/>
+        <TextBox Margin="5" x:Name="textBoxSalt" TextChanged="textBox1Text_TextChanged"/>
+
+        <TextBlock Margin="5" x:Name="firstText" Text="Decrypted text"/>
+        <TextBox Margin="5" x:Name="textBox1Text" TextChanged="textBox1Text_TextChanged"/>
+
+        <TextBlock Margin="5" x:Name="secondText" Text="Encrypted text"/>
+        <TextBox Margin="5" x:Name="textBox2Text" IsReadOnly="True"/>
+        <Button Margin="5" x:Name="buttonSave" Content="Save to Local as txt" Click="buttonSave_Click" />
+        <Button Margin="5" x:Name="buttonSaveAsJSON" Content="Save to Local as json" Click="buttonSave_Click" />
+
+    </StackPanel>
+
+</Window>
