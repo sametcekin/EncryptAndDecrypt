@@ -18,12 +18,12 @@
         <TextBox Margin="5" x:Name="textBoxSalt" TextChanged="textBox1Text_TextChanged"/>
 
         <TextBlock Margin="5" x:Name="firstText" Text="Decrypted text"/>
-        <TextBox Margin="5" x:Name="textBox1Text" TextChanged="textBox1Text_TextChanged"/>
+        <TextBox Margin="5" x:Name="textDecrypted" TextChanged="textBox1Text_TextChanged"/>
 
         <TextBlock Margin="5" x:Name="secondText" Text="Encrypted text"/>
-        <TextBox Margin="5" x:Name="textBox2Text" IsReadOnly="True"/>
+        <TextBox Margin="5" x:Name="textEncrypted" IsReadOnly="True"/>
         <Button Margin="5" x:Name="buttonSave" Content="Save to Local as txt" Click="buttonSave_Click" />
-        <Button Margin="5" x:Name="buttonSaveAsJSON" Content="Save to Local as json" Click="buttonSave_Click" />
+        <Button Margin="5" x:Name="buttonSaveAsJSON" Content="Save to Local as json" Click="buttonSaveAsJSON_Click" />
 
     </StackPanel>
 
