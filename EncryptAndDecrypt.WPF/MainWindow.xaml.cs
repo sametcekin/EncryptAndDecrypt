@@ -1,20 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using EncryptAndDecrypt.WPF.Model;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EncryptAndDecrypt.WPF
 {
@@ -26,38 +15,53 @@ namespace EncryptAndDecrypt.WPF
         public MainWindow()
         {
             InitializeComponent();
-            CryptionType.Items.Add("Encryption");
-            CryptionType.Items.Add("Decryption");
+            CryptionType.SelectedIndex = 0;
+            IfFolderOrFileNotExist(folderPath, new string[] { jsonPath, txtPath });
         }
 
-        private void CryptionType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private readonly string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "CryptionFiles");
+        private readonly string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "CryptionFiles", "crypted.json");
+        private readonly string txtPath = Path.Combine(Directory.GetCurrentDirectory(), "CryptionFiles", "crypted.txt");
+        void IfFolderOrFileNotExist(string pathFolder, string[] pathFile)
         {
-            switch (CryptionType.SelectedValue.ToString())
+            if (!Directory.Exists(pathFolder))
             {
-                case "Encryption":
-                    firstText.Text = "Decrypted text";
-                    secondText.Text = "Encrypted text";
-                    break;
-                default:
-                    firstText.Text = "Encrypted text";
-                    secondText.Text = "Decrypted text";
-                    break;
+                Directory.CreateDirectory(pathFolder);
+            }
+            foreach (var file in pathFile)
+            {
+                if (!File.Exists(file))
+                {
+                    using StreamWriter sw = File.CreateText(file);
+                }
             }
         }
-
-        private void textBox1Text_TextChanged(object sender, TextChangedEventArgs e)
+        private void CryptionType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(textDecrypted.Text))
+            if (CryptionType.Text == "Encryption")
             {
-                if (CryptionType.SelectedValue.ToString() == "Encryption")
+                firstText.Text = "Encrypted text";
+                secondText.Text = "Decrypted text";
+            }
+            else
+            {
+                firstText.Text = "Decrypted text";
+                secondText.Text = "Encrypted text";
+            }
+        }
+        private void SaltOrDecrypted_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxDecrypted.Text))
+            {
+                if (CryptionType.Text == "Encryption")
                 {
-                    textEncrypted.Text = SecurityHelper.Encrypt(textDecrypted.Text,textBoxSalt.Text);
+                    textBoxEncrypted.Text = SecurityHelper.Encrypt(textBoxDecrypted.Text, textBoxSalt.Text);
                 }
                 else
                 {
                     try
                     {
-                        textEncrypted.Text = SecurityHelper.Decrypt(textDecrypted.Text, textBoxSalt.Text);
+                        textBoxEncrypted.Text = SecurityHelper.Decrypt(textBoxDecrypted.Text, textBoxSalt.Text);
                     }
                     catch (Exception)
                     {
@@ -67,54 +71,29 @@ namespace EncryptAndDecrypt.WPF
 
             }
         }
-        
-        #region txt File
-        string saveToLocal;
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        private void buttonSaveAsTxt_Click(object sender, RoutedEventArgs e)
         {
-            if (CryptionType.SelectedValue.ToString() == "Encryption")
-                saveToLocal = $"Tag: { textTag.Text }\nCreatedDate: { DateTime.Now}\nSalt: {textBoxSalt.Text}\nDecyrptedText: { textDecrypted.Text }\nEncryptedText: { textEncrypted.Text }\n------";
-            else
-                saveToLocal = $"Tag: { textTag.Text }\nCreatedDate: { DateTime.Now}\nSalt: {textBoxSalt.Text}\nEncryptedText: { textDecrypted.Text }\nDecryptedText: { textEncrypted.Text}\n";
+            string txtData = $"Tag: { textBoxTag.Text }\n" +
+                              $"CreatedDate: { DateTime.Now}\n" +
+                              $"Salt: {textBoxSalt.Text}\n" +
+                              $"{firstText.Text}: { textBoxDecrypted.Text }\n" +
+                              $"{secondText.Text}: { textBoxEncrypted.Text }\n------";
 
-            string appPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(),"cryption.txt");
-
-            if (File.Exists(appPath))
-            {
-                File.AppendAllText(appPath, string.Format(saveToLocal+ "\n"));
-                MessageBox.Show("Successfully written!");
-            }
-           
-        }
-        #endregion
-        
-        #region json File
-        private readonly string jsonPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "crypted.json");
-        bool IfExistJSONFile()
-        {
-            if (!File.Exists(jsonPath))
-            {
-                using StreamWriter sw = File.CreateText(jsonPath);
-                return true;
-            }
-            return false;
+            File.AppendAllText(txtPath, string.Format(txtData + "\n"));
+            MessageBox.Show("Successfully written!");
         }
         private void buttonSaveAsJSON_Click(object sender, RoutedEventArgs e)
         {
-            if (IfExistJSONFile())
+            CryptionModel model = new CryptionModel
             {
-                CryptionModel model = new CryptionModel
-                {
-                    Tag = textTag.Text,
-                    Salt=textBoxSalt.Text,
-                    EncryptedText = textEncrypted.Text
-                };
-                string jsonDATA = JsonConvert.SerializeObject(model);
-                
-                //write string to file
-                File.WriteAllText(jsonPath, jsonDATA);
-            }
+                Tag = textBoxTag.Text,
+                Salt = textBoxSalt.Text,
+                DecryptedText = textBoxDecrypted.Text,
+                EncryptedText = textBoxEncrypted.Text
+            };
+            string jsonDATA = JsonConvert.SerializeObject(model);
+
+            File.AppendAllText(jsonPath, jsonDATA);
         }
-        #endregion
     }
 }

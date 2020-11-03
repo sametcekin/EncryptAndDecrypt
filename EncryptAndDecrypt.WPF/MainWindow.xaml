@@ -5,25 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EncryptAndDecrypt.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <StackPanel Margin="5">
-        <TextBlock Margin="5" Text="Cryption Type"/>
-        <ComboBox Margin="5" x:Name="CryptionType" SelectionChanged="CryptionType_SelectionChanged"/>
+        FontSize="14"
+        Title="Encryption an Decyrption" Height="450" Width="800">
+    <StackPanel>
+        <TextBlock Text="Cryption Type"/>
+        <ComboBox x:Name="CryptionType"
+                  SelectionChanged="CryptionType_SelectionChanged">
+            <ComboBoxItem Content="Encryption"/>
+            <ComboBoxItem Content="Decryption"/>
+        </ComboBox>
 
-        <TextBlock Margin="5" Text="Tag (For saving to local)"/>
-        <TextBox Margin="5" x:Name="textTag"/>
+        <TextBlock Text="Tag (For saving to local)"/>
+        <TextBox x:Name="textBoxTag"/>
+        
+        <TextBlock Text="Salt"/>
+        <TextBox x:Name="textBoxSalt"
+                     TextChanged="SaltOrDecrypted_TextChanged"
+                     Grid.Column="1"/>
 
+        <TextBlock x:Name="firstText" 
+                   Text="Decrypted text"/>
+        <TextBox x:Name="textBoxDecrypted" 
+                 TextChanged="SaltOrDecrypted_TextChanged"/>
 
-        <TextBlock Margin="5" Text="Salt"/>
-        <TextBox Margin="5" x:Name="textBoxSalt" TextChanged="textBox1Text_TextChanged"/>
-
-        <TextBlock Margin="5" x:Name="firstText" Text="Decrypted text"/>
-        <TextBox Margin="5" x:Name="textDecrypted" TextChanged="textBox1Text_TextChanged"/>
-
-        <TextBlock Margin="5" x:Name="secondText" Text="Encrypted text"/>
-        <TextBox Margin="5" x:Name="textEncrypted" IsReadOnly="True"/>
-        <Button Margin="5" x:Name="buttonSave" Content="Save to Local as txt" Click="buttonSave_Click" />
-        <Button Margin="5" x:Name="buttonSaveAsJSON" Content="Save to Local as json" Click="buttonSaveAsJSON_Click" />
+        <TextBlock x:Name="secondText" 
+                   Text="Encrypted text"/>
+        <TextBox x:Name="textBoxEncrypted" 
+                 IsReadOnly="True"/>
+        <Button x:Name="buttonSaveAsTxt"
+                Content="Save to Local as txt" 
+                Click="buttonSaveAsTxt_Click" />
+        <Button x:Name="buttonSaveAsJSON"
+                Content="Save to Local as json" 
+                Click="buttonSaveAsJSON_Click" />
 
     </StackPanel>
 
