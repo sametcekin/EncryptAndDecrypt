@@ -31,7 +31,8 @@
         <TextBlock x:Name="secondText" 
                    Text="Encrypted text"/>
         <TextBox x:Name="textBoxEncrypted" 
-                 IsReadOnly="True"/>
+                 IsReadOnly="True"
+                 Background="LightGray"/>
         <Button x:Name="buttonSaveAsTxt"
                 Content="Save to Local as txt" 
                 Click="buttonSaveAsTxt_Click" />
